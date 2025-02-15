@@ -12,7 +12,7 @@
     <artifactId>camunda-external-task-client</artifactId>
 
     <properties>
-        <jersey.version>2.31</jersey.version>
+        <jersey.version>3.1.10</jersey.version>
     </properties>
 
     <dependencyManagement>
@@ -39,12 +39,23 @@
         <dependency>
             <groupId>org.camunda.bpm</groupId>
             <artifactId>camunda-external-task-client</artifactId>
-            <version>1.4.0</version>
+            <version>7.22.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.16</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.6.1</version>
+            <version>2.0.16</version>
         </dependency>
 
         <dependency>
