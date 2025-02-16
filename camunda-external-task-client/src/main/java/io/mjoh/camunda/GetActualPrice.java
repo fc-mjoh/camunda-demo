@@ -20,8 +20,6 @@ public class GetActualPrice {
                 .asyncResponseTimeout(10000) // long polling timeout
                 .build();
 
-        // subscribe to an external task topic as specified in the process
-        // the default lock duration is 20 seconds, but you can override this
         client.subscribe("get-coffee-price")
                 .lockDuration(1000)
                 .handler((externalTask, externalTaskService) -> {
@@ -37,7 +35,7 @@ public class GetActualPrice {
                     LOGGER.info("lastTradePrice = {}", t);
 
                     Map<String, Object> hm = new HashMap<>();
-                    hm.put("lastTradePrice", Double.parseDouble(t));
+                    hm.put("lastTradePrice", Long.parseLong(t));
 
                     // Complete the task
                     externalTaskService.complete(externalTask, hm);

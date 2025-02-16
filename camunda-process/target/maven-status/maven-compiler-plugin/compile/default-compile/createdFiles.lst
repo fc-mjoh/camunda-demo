@@ -1,1 +1,4 @@
+io/mjoh/camunda/delegate/NotifyDelegate.class
+io/mjoh/camunda/delegate/CallNotifyProcessDelegate.class
+io/mjoh/camunda/delegate/ExecuteOrderDelegate.class
 io/mjoh/camunda/Application.class
