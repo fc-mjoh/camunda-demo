@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="camunda-8" />
         <module name="camunda-process" />
         <module name="camunda-external-task-client" />
       </profile>

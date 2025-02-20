@@ -11,7 +11,6 @@
 
     <artifactId>camunda-process</artifactId>
 
-
     <dependencies>
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
@@ -20,12 +19,13 @@
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>24.1.1</version>
+            <version>23.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>24.1.1</version>
+<!--            <version>24.1.1</version>-->
+            <version>23.1.5</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
