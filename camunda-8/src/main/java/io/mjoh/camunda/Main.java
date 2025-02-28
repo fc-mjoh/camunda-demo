@@ -1,21 +1,13 @@
 package io.mjoh.camunda;
 
-import io.camunda.zeebe.spring.client.EnableZeebeClient;
 import io.camunda.zeebe.spring.client.annotation.Deployment;
-import io.camunda.zeebe.spring.client.config.ZeebeClientStarterAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
-import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableZeebeClient
 @SpringBootApplication
-@EnableScheduling
 @Deployment(resources = "classpath*:*.bpmn")
-@Import(value = {ZeebeClientStarterAutoConfiguration.class})
 public class Main {
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);

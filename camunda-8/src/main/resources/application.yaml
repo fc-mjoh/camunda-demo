@@ -1,6 +1,3 @@
-spring:
-  application:
-    name: camunda8-demo
 camunda:
   client:
     mode: self-managed
