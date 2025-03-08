@@ -12,7 +12,7 @@
     <artifactId>camunda-8</artifactId>
 
     <properties>
-        <java.version>23</java.version>
+        <java.version>17</java.version>
         <spring-zeebe.version>8.8.0-alpha1</spring-zeebe.version>
     </properties>
 

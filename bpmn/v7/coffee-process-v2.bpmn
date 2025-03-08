@@ -2,7 +2,11 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_11jql3k" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
   <bpmn:process id="coffee-process" isExecutable="true" camunda:historyTimeToLive="1">
     <bpmn:startEvent id="StartEvent_1">
-      <bpmn:extensionElements />
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="maxCoffeePrice" label="max coffee price" type="long" defaultValue="12" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_13ni5tx</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_13ni5tx" sourceRef="StartEvent_1" targetRef="get-coffee-price" />
@@ -21,7 +25,7 @@
       <bpmn:outgoing>Flow_0oialm9</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0hj6x28" name="nice price" sourceRef="Gateway_14km4iy" targetRef="Activity_00yuh6w">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{lastTradePrice &lt;= 5000}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{lastTradePrice &lt;= maxCoffeePrice}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1n6ky9n" sourceRef="Activity_00yuh6w" targetRef="Event_0wewr0q" />
     <bpmn:userTask id="Activity_00yuh6w" name="Review coffee price">

@@ -26,7 +26,13 @@
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1">
-      <bpmn:extensionElements />
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="maxCoffeePrice" label="max coffee price" type="long" defaultValue="12">
+            <camunda:properties />
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_13ni5tx</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="get-coffee-price" name="Get actual coffee price" camunda:type="external" camunda:topic="get-coffee-price">
@@ -39,13 +45,8 @@
       <bpmn:outgoing>Flow_0hj6x28</bpmn:outgoing>
       <bpmn:outgoing>Flow_0oialm9</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Activity_00yuh6w" name="Review coffee price">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="shouldOrder" label="shouldOrder" type="boolean" defaultValue="false" />
-          <camunda:formField id="lastTradePrice" label="lastTradePrice" type="string" defaultValue="#{lastTradePrice}" />
-        </camunda:formData>
-      </bpmn:extensionElements>
+    <bpmn:userTask id="Activity_00yuh6w" name="Review coffee price" camunda:formRef="Form_09ont9c" camunda:formRefBinding="latest">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_0hj6x28</bpmn:incoming>
       <bpmn:outgoing>Flow_1n6ky9n</bpmn:outgoing>
     </bpmn:userTask>
@@ -53,7 +54,7 @@
     <bpmn:sequenceFlow id="Flow_1n6ky9n" sourceRef="Activity_00yuh6w" targetRef="Gateway_0r6xjwk" />
     <bpmn:sequenceFlow id="Flow_1nyohbl" sourceRef="get-coffee-price" targetRef="Gateway_14km4iy" />
     <bpmn:sequenceFlow id="Flow_0hj6x28" name="nice price" sourceRef="Gateway_14km4iy" targetRef="Activity_00yuh6w">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{lastTradePrice &lt;= 5000}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{lastTradePrice &lt;=  maxCoffeePrice}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0oialm9" name="price to high" sourceRef="Gateway_14km4iy" targetRef="Event_0o1nt86" />
     <bpmn:exclusiveGateway id="Gateway_0r6xjwk" default="Flow_039yczd">
