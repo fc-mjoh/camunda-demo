@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_11jql3k" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
+  <bpmn:collaboration id="Collaboration_0m9swep">
+    <bpmn:participant id="Participant_0xpktkq" name="Order process" processRef="coffee-process" />
+  </bpmn:collaboration>
+  <bpmn:process id="coffee-process" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:laneSet id="LaneSet_1gcans9">
+      <bpmn:lane id="Lane_1nh31dn">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>get-coffee-price</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_14km4iy</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_00yuh6w</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0wewr0q</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0r6xjwk</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1bq9h79</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1cpydb1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_0malf6i">
+        <bpmn:flowNodeRef>Event_0o1nt86</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="maxCoffeePrice" label="max coffee price" type="long" defaultValue="12" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_13ni5tx</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="get-coffee-price" name="Get actual coffee price" camunda:type="external" camunda:topic="get-coffee-price">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_13ni5tx</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nyohbl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_14km4iy" default="Flow_0oialm9">
+      <bpmn:incoming>Flow_1nyohbl</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hj6x28</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0oialm9</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Activity_00yuh6w" name="Review coffee price">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="shouldOrder" label="shouldOrder" type="boolean" defaultValue="false" />
+          <camunda:formField id="lastTradePrice" label="lastTradePrice" type="string" defaultValue="#{lastTradePrice}" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0hj6x28</bpmn:incoming>
+      <bpmn:outgoing>Flow_1n6ky9n</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_13ni5tx" sourceRef="StartEvent_1" targetRef="get-coffee-price" />
+    <bpmn:sequenceFlow id="Flow_1n6ky9n" sourceRef="Activity_00yuh6w" targetRef="Gateway_0r6xjwk" />
+    <bpmn:sequenceFlow id="Flow_1nyohbl" sourceRef="get-coffee-price" targetRef="Gateway_14km4iy" />
+    <bpmn:sequenceFlow id="Flow_0hj6x28" name="nice price" sourceRef="Gateway_14km4iy" targetRef="Activity_00yuh6w">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{lastTradePrice &lt;= maxCoffeePrice}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0oialm9" name="price to high" sourceRef="Gateway_14km4iy" targetRef="Event_0o1nt86" />
+    <bpmn:endEvent id="Event_0wewr0q">
+      <bpmn:incoming>Flow_039yczd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_0r6xjwk" default="Flow_039yczd">
+      <bpmn:incoming>Flow_1n6ky9n</bpmn:incoming>
+      <bpmn:outgoing>Flow_039yczd</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1fp4m47</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_039yczd" name="do nothing" sourceRef="Gateway_0r6xjwk" targetRef="Event_0wewr0q" />
+    <bpmn:sendTask id="Activity_1bq9h79" name="execute order" camunda:delegateExpression="#{executeOrderDelegate}">
+      <bpmn:incoming>Flow_1fp4m47</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xzifmm</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_1fp4m47" name="execute order" sourceRef="Gateway_0r6xjwk" targetRef="Activity_1bq9h79">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{shouldOrder == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_1cpydb1">
+      <bpmn:incoming>Flow_1xzifmm</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xzifmm" sourceRef="Activity_1bq9h79" targetRef="Event_1cpydb1" />
+    <bpmn:endEvent id="Event_0o1nt86">
+      <bpmn:incoming>Flow_0oialm9</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0m9swep">
+      <bpmndi:BPMNShape id="Participant_0xpktkq_di" bpmnElement="Participant_0xpktkq" isHorizontal="true">
+        <dc:Bounds x="130" y="40" width="960" height="470" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0malf6i_di" bpmnElement="Lane_0malf6i" isHorizontal="true">
+        <dc:Bounds x="160" y="400" width="930" height="110" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1nh31dn_di" bpmnElement="Lane_1nh31dn" isHorizontal="true">
+        <dc:Bounds x="160" y="40" width="930" height="360" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0quwl52_di" bpmnElement="get-coffee-price">
+        <dc:Bounds x="270" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_14km4iy_di" bpmnElement="Gateway_14km4iy" isMarkerVisible="true">
+        <dc:Bounds x="455" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12g31cc_di" bpmnElement="Activity_00yuh6w">
+        <dc:Bounds x="610" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0wewr0q_di" bpmnElement="Event_0wewr0q">
+        <dc:Bounds x="932" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0r6xjwk_di" bpmnElement="Gateway_0r6xjwk" isMarkerVisible="true">
+        <dc:Bounds x="795" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1f8kzny_di" bpmnElement="Activity_1bq9h79">
+        <dc:Bounds x="770" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cpydb1_di" bpmnElement="Event_1cpydb1">
+        <dc:Bounds x="932" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0o1nt86_di" bpmnElement="Event_0o1nt86">
+        <dc:Bounds x="932" y="442" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_13ni5tx_di" bpmnElement="Flow_13ni5tx">
+        <di:waypoint x="218" y="120" />
+        <di:waypoint x="270" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1n6ky9n_di" bpmnElement="Flow_1n6ky9n">
+        <di:waypoint x="710" y="120" />
+        <di:waypoint x="795" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nyohbl_di" bpmnElement="Flow_1nyohbl">
+        <di:waypoint x="370" y="120" />
+        <di:waypoint x="455" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hj6x28_di" bpmnElement="Flow_0hj6x28">
+        <di:waypoint x="505" y="120" />
+        <di:waypoint x="610" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="534" y="102" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oialm9_di" bpmnElement="Flow_0oialm9">
+        <di:waypoint x="480" y="145" />
+        <di:waypoint x="480" y="460" />
+        <di:waypoint x="932" y="460" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="483" y="176" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_039yczd_di" bpmnElement="Flow_039yczd">
+        <di:waypoint x="845" y="120" />
+        <di:waypoint x="932" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="863" y="102" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fp4m47_di" bpmnElement="Flow_1fp4m47">
+        <di:waypoint x="820" y="145" />
+        <di:waypoint x="820" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="826" y="176" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xzifmm_di" bpmnElement="Flow_1xzifmm">
+        <di:waypoint x="870" y="250" />
+        <di:waypoint x="932" y="250" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
