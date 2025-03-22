@@ -1,5 +1,6 @@
 package io.mjoh.camunda.delegate;
 
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.slf4j.Logger;
@@ -13,6 +14,13 @@ public class NotifyDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) {
-        LOGGER.info("NotifyProcessDelegate: {}", delegateExecution.getVariable("message"));
+        String message = (String) delegateExecution.getVariable("message");
+        LOGGER.info("NotifyProcessDelegate: {}", message);
+        if (message.toLowerCase().contains("boss")) {
+            LOGGER.info("Chef found");
+            throw new BpmnError("he_is_watching_you");
+        } else if (message.toLowerCase().contains("error")) {
+            throw new RuntimeException("Error");
+        }
     }
 }

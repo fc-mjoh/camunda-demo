@@ -20,7 +20,7 @@ public class GetActualPrice {
     private static final Logger LOGGER = LoggerFactory.getLogger(GetActualPrice.class);
 
     public static void main(String[] args) {
-        ExternalTaskClient client = ExternalTaskClient.create().baseUrl("http://localhost:8081/engine-rest")
+        ExternalTaskClient client = ExternalTaskClient.create().baseUrl("http://localhost:8080/engine-rest")
                 .asyncResponseTimeout(10000) // long polling timeout
                 .build();
 
@@ -30,11 +30,10 @@ public class GetActualPrice {
 
                     WebTarget webTarget;
                     Client restClient = ClientBuilder.newClient();
-                    webTarget = restClient.target("http://localhost:8080/random");
-
+                    webTarget = restClient.target("http://localhost:9080/random-json");
 
                     String t = webTarget.request()
-                            .accept(MediaType.TEXT_PLAIN).get(String.class);
+                            .accept(MediaType.APPLICATION_JSON).get(String.class);
 
                     SpinJsonNode json = S(t, json());
                     Number price = json.prop("price").numberValue();

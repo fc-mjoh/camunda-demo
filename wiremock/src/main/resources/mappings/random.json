@@ -1,0 +1,10 @@
+{
+  "request": {
+    "urlPath": "/random"
+  },
+  "response": {
+    "body": "{{randomValue length=4 type='NUMERIC'}}",
+    "transformers": ["response-template"],
+    "status" : 200
+  }
+}

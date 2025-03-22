@@ -41,7 +41,6 @@
             <artifactId>camunda-external-task-client</artifactId>
             <version>7.22.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>

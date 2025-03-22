@@ -21,19 +21,12 @@
                 <artifactId>wiremock-maven-plugin</artifactId>
                 <version>8.0.0</version>
 
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>run</goal>
-                            <goal>stop</goal> <!-- important in multi-module project where more than one module uses this plugin -->
-                        </goals>
-                        <configuration>
-                            <dir>target/classes</dir>
-                            <params>--port=8081 --verbose</params>
-                            <skip>false</skip> <!-- set to true to skip plugin execution -->
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <keepRunning>true</keepRunning>
+                    <dir>target/classes</dir>
+                    <params>--port=9080 --verbose</params>
+                </configuration>
+
                 <dependencies>
                     <dependency>
                         <groupId>org.wiremock</groupId>
@@ -44,5 +37,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

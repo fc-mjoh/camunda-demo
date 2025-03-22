@@ -1,0 +1,13 @@
+{
+  "request": {
+    "urlPath": "/random-json"
+  },
+  "response": {
+    "body": "{ \"price\": {{randomValue length=4 type='NUMERIC'}} }",
+    "transformers": ["response-template"],
+    "status" : 200,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
